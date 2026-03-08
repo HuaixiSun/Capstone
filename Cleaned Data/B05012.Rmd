@@ -32,6 +32,6 @@ all_data <- bind_rows(all_dfs) %>%
   select(-"X") %>%
   mutate(Estimate_Total_Foreign_Born = coalesce(Estimate_Total_Foreign_Born, Estimate_Total_Foreign_born)) %>%
   select(-Estimate_Total_Foreign_born)
-all_data
+write.csv(all_data, "B05012.csv", row.names = TRUE)
 ```
 

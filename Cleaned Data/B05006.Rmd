@@ -38,5 +38,5 @@ keep_cols <- all_cols[str_count(all_cols, "_") <= 4|str_detect(all_cols, "n_e_c"
 ```{r}
 final_data <- all_data %>%
   select(all_of(keep_cols))
-final_data
+write.csv(final_data, "B05006.csv", row.names = TRUE)
 ```
