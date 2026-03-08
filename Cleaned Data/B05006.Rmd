@@ -1,0 +1,42 @@
+---
+title: "B05006"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(purrr)
+library(tidyverse)
+```
+
+```{r}
+raw <- list.files(path = "../Raw Data CCD", pattern = "B05006-Data.csv", full.names = TRUE,  recursive = TRUE)
+all_dfs <- list() 
+for (f in raw) {
+  current_year <- as.numeric(str_extract(f, "20\\d{2}"))
+  temp_df <- read.csv(f, skip = 1, stringsAsFactors = FALSE)
+  names(temp_df) <- names(temp_df) %>%
+    str_replace_all("[:!\\.]", "_") %>% 
+    str_replace_all("_+", "_") %>%
+    str_remove("_$") %>%
+    str_trim()
+  temp_df$Year <- current_year
+  all_dfs[[f]] <- temp_df
+}
+all_data <- bind_rows(all_dfs) %>%
+  select(Year, everything()) %>%
+  select(-contains("Margin")) %>%
+  select(-"X")
+```
+
+```{r}
+long_region_end <- "(?<!Other_)South_Central_Asia$|(?<!Other_)South_Eastern_Asia$|(?<!Other_)Australia_and_New_Zealand_Subregion$"
+all_cols <- colnames(all_data)
+keep_cols <- all_cols[str_count(all_cols, "_") <= 4|str_detect(all_cols, "n_e_c")|str_detect(all_cols, long_region_end)]
+```
+
+```{r}
+final_data <- all_data %>%
+  select(all_of(keep_cols))
+final_data
+```
