@@ -11,7 +11,7 @@
 
 
 
-<title>B05006</title>
+<title>B05006.knit</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,11 +348,11 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">B05006</h1>
 
 </div>
 
 
+<p>get— title: “B05006” output: html_document —</p>
 <pre class="r"><code>library(dplyr)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;dplyr&#39;</code></pre>
@@ -375,16 +375,16 @@ library(tidyverse)</code></pre>
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>raw &lt;- list.files(path = &quot;../Raw Data CCD&quot;, pattern = &quot;B05006-Data.csv&quot;, full.names = TRUE,  recursive = TRUE)
 all_dfs &lt;- list() 
-for (f in raw) {
-  current_year &lt;- as.numeric(str_extract(f, &quot;20\\d{2}&quot;))
-  temp_df &lt;- read.csv(f, skip = 1, stringsAsFactors = FALSE)
-  names(temp_df) &lt;- names(temp_df) %&gt;%
+for (i in raw) {
+  Year &lt;- as.numeric(str_extract(i, &quot;20\\d{2}&quot;))
+  temp &lt;- read.csv(i, skip = 1, stringsAsFactors = FALSE)
+  names(temp) &lt;- names(temp) %&gt;%
     str_replace_all(&quot;[:!\\.]&quot;, &quot;_&quot;) %&gt;% 
     str_replace_all(&quot;_+&quot;, &quot;_&quot;) %&gt;%
     str_remove(&quot;_$&quot;) %&gt;%
     str_trim()
-  temp_df$Year &lt;- current_year
-  all_dfs[[f]] &lt;- temp_df
+  temp$Year &lt;- Year
+  all_dfs[[i]] &lt;- temp
 }
 all_data &lt;- bind_rows(all_dfs) %&gt;%
   select(Year, everything()) %&gt;%

@@ -1,4 +1,4 @@
----
+get---
 title: "B05006"
 output: html_document
 ---
@@ -12,16 +12,16 @@ library(tidyverse)
 ```{r}
 raw <- list.files(path = "../Raw Data CCD", pattern = "B05006-Data.csv", full.names = TRUE,  recursive = TRUE)
 all_dfs <- list() 
-for (f in raw) {
-  current_year <- as.numeric(str_extract(f, "20\\d{2}"))
-  temp_df <- read.csv(f, skip = 1, stringsAsFactors = FALSE)
-  names(temp_df) <- names(temp_df) %>%
+for (i in raw) {
+  Year <- as.numeric(str_extract(i, "20\\d{2}"))
+  temp <- read.csv(i, skip = 1, stringsAsFactors = FALSE)
+  names(temp) <- names(temp) %>%
     str_replace_all("[:!\\.]", "_") %>% 
     str_replace_all("_+", "_") %>%
     str_remove("_$") %>%
     str_trim()
-  temp_df$Year <- current_year
-  all_dfs[[f]] <- temp_df
+  temp$Year <- Year
+  all_dfs[[i]] <- temp
 }
 all_data <- bind_rows(all_dfs) %>%
   select(Year, everything()) %>%
