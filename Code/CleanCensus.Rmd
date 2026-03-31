@@ -1,0 +1,596 @@
+---
+title: "Cleaning Census Tracts"
+author: "Breanna Blackwood"
+date: "2026-03-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+B16004
+
+```{r B16004}
+#Read in data
+B16004_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175702/ACSDT5Y2014.B16004-Data.csv", header = TRUE)
+B16004_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175702/ACSDT5Y2019.B16004-Data.csv", header = TRUE)
+B16004_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175702/ACSDT5Y2024.B16004-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B16004_2014) <- as.character(B16004_2014[1, ])
+colnames(B16004_2019) <- as.character(B16004_2019[1, ])
+colnames(B16004_2024) <- as.character(B16004_2024[1, ])
+
+#Remove the first row
+B16004_2014 <- B16004_2014[-1, ]
+B16004_2019 <- B16004_2019[-1, ]
+B16004_2024 <- B16004_2024[-1, ]
+
+
+#Filter out margin of error columns
+library(dplyr)
+B16004_2014 <- B16004_2014 |>
+  select(-contains("Margin"))
+B16004_2019 <- B16004_2019 |>
+  select(-contains("Margin"))
+B16004_2024 <- B16004_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B16004_2014) <- gsub("!!", "_", colnames(B16004_2014))
+colnames(B16004_2014) <- gsub(" ", "_", colnames(B16004_2014))
+
+colnames(B16004_2019) <- gsub("!!", "_", colnames(B16004_2019))
+colnames(B16004_2019) <- gsub(" ", "_", colnames(B16004_2019))
+colnames(B16004_2019) <- gsub(":", "", colnames(B16004_2019))
+
+colnames(B16004_2024) <- gsub("!!", "_", colnames(B16004_2024))
+colnames(B16004_2024) <- gsub(" ", "_", colnames(B16004_2024))
+colnames(B16004_2024) <- gsub(":", "", colnames(B16004_2024))
+
+#Write these out 
+write.csv(B16004_2014, "B16004_2014CensusTracts.csv")
+write.csv(B16004_2019, "B16004_2019CensusTracts.csv")
+write.csv(B16004_2024, "B16004_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B16004_2014$Year <- "2014"
+B16004_2019$Year <- "2019"
+B16004_2024$Year <- "2024"
+
+#Bind them together
+b16004_census <- bind_rows(B16004_2014, B16004_2019, B16004_2024)
+
+#Write to .csv
+write.csv(b16004_census, "B16004_CensusTracts.csv")
+```
+
+
+B05002 
+```{r B05002}
+#Read in data
+B05002_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175436/ACSDT5Y2014.B05002-Data.csv", header = TRUE)
+B05002_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175436/ACSDT5Y2019.B05002-Data.csv", header = TRUE)
+B05002_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175436/ACSDT5Y2024.B05002-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B05002_2014) <- as.character(B05002_2014[1, ])
+colnames(B05002_2019) <- as.character(B05002_2019[1, ])
+colnames(B05002_2024) <- as.character(B05002_2024[1, ])
+
+#Remove the first row
+B05002_2014 <- B05002_2014[-1, ]
+B05002_2019 <- B05002_2019[-1, ]
+B05002_2024 <- B05002_2024[-1, ]
+
+
+#Filter out margin of error columns
+B05002_2014 <- B05002_2014 |>
+  select(-contains("Margin"))
+B05002_2019 <- B05002_2019 |>
+  select(-contains("Margin"))
+B05002_2024 <- B05002_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B05002_2014) <- gsub("!!", "_", colnames(B05002_2014))
+colnames(B05002_2014) <- gsub(" ", "_", colnames(B05002_2014))
+
+colnames(B05002_2019) <- gsub("!!", "_", colnames(B05002_2019))
+colnames(B05002_2019) <- gsub(" ", "_", colnames(B05002_2019))
+colnames(B05002_2019) <- gsub(":", "", colnames(B05002_2019))
+
+colnames(B05002_2024) <- gsub("!!", "_", colnames(B05002_2024))
+colnames(B05002_2024) <- gsub(" ", "_", colnames(B05002_2024))
+colnames(B05002_2024) <- gsub("-", "_", colnames(B05002_2024))
+colnames(B05002_2024) <- gsub(":", "", colnames(B05002_2024))
+
+#Write these out 
+write.csv(B05002_2014, "B05002_2014CensusTracts.csv")
+write.csv(B05002_2019, "B05002_2019CensusTracts.csv")
+write.csv(B05002_2024, "B05002_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B05002_2014$Year <- "2014"
+B05002_2019$Year <- "2019"
+B05002_2024$Year <- "2024"
+
+#Bind them together
+b05002 <- bind_rows(B05002_2019, B05002_2024)
+b05002_census <- bind_rows(B05002_2014, b05002) #Best solution I can come up with .... 
+
+#Write to .csv
+write.csv(b05002_census, "B05002_CensusTracts.csv")
+```
+
+
+B05006
+
+```{r B05006}
+#Read in data
+B05006_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175502/ACSDT5Y2014.B05006-Data.csv", header = TRUE)
+B05006_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175502/ACSDT5Y2019.B05006-Data.csv", header = TRUE)
+B05006_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175502/ACSDT5Y2024.B05006-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B05006_2014) <- as.character(B05006_2014[1, ])
+colnames(B05006_2019) <- as.character(B05006_2019[1, ])
+colnames(B05006_2024) <- as.character(B05006_2024[1, ])
+
+#Remove the first row
+B05006_2014 <- B05006_2014[-1, ]
+B05006_2019 <- B05006_2019[-1, ]
+B05006_2024 <- B05006_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+B05006_2014 <- B05006_2014 |>
+  select(-contains("Margin"))
+B05006_2019 <- B05006_2019 |>
+  select(-contains("Margin"))
+B05006_2024 <- B05006_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B05006_2014) <- gsub("!!", "_", colnames(B05006_2014))
+colnames(B05006_2014) <- gsub(" ", "_", colnames(B05006_2014))
+
+colnames(B05006_2019) <- gsub("!!", "_", colnames(B05006_2019))
+colnames(B05006_2019) <- gsub(" ", "_", colnames(B05006_2019))
+colnames(B05006_2019) <- gsub(":", "", colnames(B05006_2019))
+
+colnames(B05006_2024) <- gsub("!!", "_", colnames(B05006_2024))
+colnames(B05006_2024) <- gsub(" ", "_", colnames(B05006_2024))
+colnames(B05006_2024) <- gsub(":", "", colnames(B05006_2024))
+
+#Write these out 
+write.csv(B05006_2014, "B05006_2014CensusTracts.csv")
+write.csv(B05006_2019, "B05006_2019CensusTracts.csv")
+write.csv(B05006_2024, "B05006_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B05006_2014$Year <- "2014"
+B05006_2019$Year <- "2019"
+B05006_2024$Year <- "2024"
+
+#Bind them together
+b05006_census <- bind_rows(B05006_2014, B05006_2019, B05006_2024)
+
+#Write to .csv
+write.csv(b05006_census, "B05006_CensusTracts.csv")
+```
+
+
+B05012 
+
+```{r B05012}
+#Read in data
+B05012_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175523/ACSDT5Y2014.B05012-Data.csv", header = TRUE)
+B05012_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175523/ACSDT5Y2019.B05012-Data.csv", header = TRUE)
+B05012_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175523/ACSDT5Y2024.B05012-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B05012_2014) <- as.character(B05012_2014[1, ])
+colnames(B05012_2019) <- as.character(B05012_2019[1, ])
+colnames(B05012_2024) <- as.character(B05012_2024[1, ])
+
+#Remove the first row
+B05012_2014 <- B05012_2014[-1, ]
+B05012_2019 <- B05012_2019[-1, ]
+B05012_2024 <- B05012_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+B05012_2014 <- B05012_2014 |>
+  select(-contains("Margin"))
+B05012_2019 <- B05012_2019 |>
+  select(-contains("Margin"))
+B05012_2024 <- B05012_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B05012_2014) <- gsub("!!", "_", colnames(B05012_2014))
+colnames(B05012_2014) <- gsub(" ", "_", colnames(B05012_2014))
+
+colnames(B05012_2019) <- gsub("!!", "_", colnames(B05012_2019))
+colnames(B05012_2019) <- gsub(" ", "_", colnames(B05012_2019))
+
+colnames(B05012_2024) <- gsub("!!", "_", colnames(B05012_2024))
+colnames(B05012_2024) <- gsub(" ", "_", colnames(B05012_2024))
+
+#Write these out 
+write.csv(B05012_2014, "B05012_2014CensusTracts.csv")
+write.csv(B05012_2019, "B05012_2019CensusTracts.csv")
+write.csv(B05012_2024, "B05012_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B05012_2014$Year <- "2014"
+B05012_2019$Year <- "2019"
+B05012_2024$Year <- "2024"
+
+#Bind them together
+b05012_census <- bind_rows(B05012_2014, B05012_2019, B05012_2024)
+
+#Write to .csv
+write.csv(b05012_census, "B05012_CensusTracts.csv")
+```
+
+
+B05013
+
+```{r B05013}
+#Read in data
+B05013_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175546/ACSDT5Y2014.B05013-Data.csv", header = TRUE)
+B05013_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175546/ACSDT5Y2019.B05013-Data.csv", header = TRUE)
+B05013_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175546/ACSDT5Y2024.B05013-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B05013_2014) <- as.character(B05013_2014[1, ])
+colnames(B05013_2019) <- as.character(B05013_2019[1, ])
+colnames(B05013_2024) <- as.character(B05013_2024[1, ])
+
+#Remove the first row
+B05013_2014 <- B05013_2014[-1, ]
+B05013_2019 <- B05013_2019[-1, ]
+B05013_2024 <- B05013_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+B05013_2014 <- B05013_2014 |>
+  select(-contains("Margin"))
+B05013_2019 <- B05013_2019 |>
+  select(-contains("Margin"))
+B05013_2024 <- B05013_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B05013_2014) <- gsub("!!", "_", colnames(B05013_2014))
+colnames(B05013_2014) <- gsub(" ", "_", colnames(B05013_2014))
+colnames(B05013_2014) <- gsub(":", "", colnames(B05013_2014))
+
+colnames(B05013_2019) <- gsub("!!", "_", colnames(B05013_2019))
+colnames(B05013_2019) <- gsub(" ", "_", colnames(B05013_2019))
+colnames(B05013_2019) <- gsub(":", "", colnames(B05013_2019))
+
+colnames(B05013_2024) <- gsub("!!", "_", colnames(B05013_2024))
+colnames(B05013_2024) <- gsub(" ", "_", colnames(B05013_2024))
+colnames(B05013_2024) <- gsub(":", "", colnames(B05013_2024))
+
+#Write these out 
+write.csv(B05013_2014, "B05013_2014CensusTracts.csv")
+write.csv(B05013_2019, "B05013_2019CensusTracts.csv")
+write.csv(B05013_2024, "B05013_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B05013_2014$Year <- "2014"
+B05013_2019$Year <- "2019"
+B05013_2024$Year <- "2024"
+
+#Bind them together
+b05013_census <- bind_rows(B05013_2014, B05013_2019, B05013_2024)
+
+#Write to .csv
+write.csv(b05013_census, "B05013_CensusTracts.csv")
+```
+
+B16003
+```{r B16003}
+#Read in data
+B16003_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175643/ACSDT5Y2014.B16003-Data.csv", header = TRUE)
+B16003_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175643/ACSDT5Y2019.B16003-Data.csv", header = TRUE)
+B16003_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175643/ACSDT5Y2024.B16003-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B16003_2014) <- as.character(B16003_2014[1, ])
+colnames(B16003_2019) <- as.character(B16003_2019[1, ])
+colnames(B16003_2024) <- as.character(B16003_2024[1, ])
+
+#Remove the first row
+B16003_2014 <- B16003_2014[-1, ]
+B16003_2019 <- B16003_2019[-1, ]
+B16003_2024 <- B16003_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+B16003_2014 <- B16003_2014 |>
+  select(-contains("Margin"))
+B16003_2019 <- B16003_2019 |>
+  select(-contains("Margin"))
+B16003_2024 <- B16003_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B16003_2014) <- gsub("!!", "_", colnames(B16003_2014))
+colnames(B16003_2014) <- gsub(" ", "_", colnames(B16003_2014))
+colnames(B16003_2014) <- gsub(":", "", colnames(B16003_2014))
+
+colnames(B16003_2019) <- gsub("!!", "_", colnames(B16003_2019))
+colnames(B16003_2019) <- gsub(" ", "_", colnames(B16003_2019))
+colnames(B16003_2019) <- gsub(":", "", colnames(B16003_2019))
+
+colnames(B16003_2024) <- gsub("!!", "_", colnames(B16003_2024))
+colnames(B16003_2024) <- gsub(" ", "_", colnames(B16003_2024))
+colnames(B16003_2024) <- gsub(":", "", colnames(B16003_2024))
+
+#Write these out 
+write.csv(B16003_2014, "B16003_2014CensusTracts.csv")
+write.csv(B16003_2019, "B16003_2019CensusTracts.csv")
+write.csv(B16003_2024, "B16003_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B16003_2014$Year <- "2014"
+B16003_2019$Year <- "2019"
+B16003_2024$Year <- "2024"
+
+#Bind them together
+b16003_census <- bind_rows(B16003_2014, B16003_2019, B16003_2024)
+
+#Write to .csv
+write.csv(b16003_census, "B16003_CensusTracts.csv")
+```
+
+B16005
+
+```{r B16005}
+#Read in data
+B16005_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175803/ACSDT5Y2014.B16005-Data.csv", header = TRUE)
+B16005_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175803/ACSDT5Y2019.B16005-Data.csv", header = TRUE)
+B16005_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175803/ACSDT5Y2024.B16005-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B16005_2014) <- as.character(B16005_2014[1, ])
+colnames(B16005_2019) <- as.character(B16005_2019[1, ])
+colnames(B16005_2024) <- as.character(B16005_2024[1, ])
+
+#Remove the first row
+B16005_2014 <- B16005_2014[-1, ]
+B16005_2019 <- B16005_2019[-1, ]
+B16005_2024 <- B16005_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+B16005_2014 <- B16005_2014 |>
+  select(-contains("Margin"))
+B16005_2019 <- B16005_2019 |>
+  select(-contains("Margin"))
+B16005_2024 <- B16005_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B16005_2014) <- gsub("!!", "_", colnames(B16005_2014))
+colnames(B16005_2014) <- gsub(" ", "_", colnames(B16005_2014))
+colnames(B16005_2014) <- gsub(":", "", colnames(B16005_2014))
+
+colnames(B16005_2019) <- gsub("!!", "_", colnames(B16005_2019))
+colnames(B16005_2019) <- gsub(" ", "_", colnames(B16005_2019))
+colnames(B16005_2019) <- gsub(":", "", colnames(B16005_2019))
+
+colnames(B16005_2024) <- gsub("!!", "_", colnames(B16005_2024))
+colnames(B16005_2024) <- gsub(" ", "_", colnames(B16005_2024))
+colnames(B16005_2024) <- gsub(":", "", colnames(B16005_2024))
+
+#Write these out 
+write.csv(B16005_2014, "B16005_2014CensusTracts.csv")
+write.csv(B16005_2019, "B16005_2019CensusTracts.csv")
+write.csv(B16005_2024, "B16005_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B16005_2014$Year <- "2014"
+B16005_2019$Year <- "2019"
+B16005_2024$Year <- "2024"
+
+#Bind them together
+b16005_census <- bind_rows(B16005_2014, B16005_2019, B16005_2024)
+
+#Write to .csv
+write.csv(b16005_census, "B16005_CensusTracts.csv")
+```
+
+B16008
+
+```{r B16008}
+#Read in data
+B16008_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175821/ACSDT5Y2014.B16008-Data.csv", header = TRUE)
+B16008_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175821/ACSDT5Y2019.B16008-Data.csv", header = TRUE)
+B16008_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175821/ACSDT5Y2024.B16008-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(B16008_2014) <- as.character(B16008_2014[1, ])
+colnames(B16008_2019) <- as.character(B16008_2019[1, ])
+colnames(B16008_2024) <- as.character(B16008_2024[1, ])
+
+#Remove the first row
+B16008_2014 <- B16008_2014[-1, ]
+B16008_2019 <- B16008_2019[-1, ]
+B16008_2024 <- B16008_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+B16008_2014 <- B16008_2014 |>
+  select(-contains("Margin"))
+B16008_2019 <- B16008_2019 |>
+  select(-contains("Margin"))
+B16008_2024 <- B16008_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(B16008_2014) <- gsub("!!", "_", colnames(B16008_2014))
+colnames(B16008_2014) <- gsub(" ", "_", colnames(B16008_2014))
+colnames(B16008_2014) <- gsub(":", "", colnames(B16008_2014))
+
+colnames(B16008_2019) <- gsub("!!", "_", colnames(B16008_2019))
+colnames(B16008_2019) <- gsub(" ", "_", colnames(B16008_2019))
+colnames(B16008_2019) <- gsub(":", "", colnames(B16008_2019))
+
+colnames(B16008_2024) <- gsub("!!", "_", colnames(B16008_2024))
+colnames(B16008_2024) <- gsub(" ", "_", colnames(B16008_2024))
+colnames(B16008_2024) <- gsub(":", "", colnames(B16008_2024))
+
+#Write these out 
+write.csv(B16008_2014, "B16008_2014CensusTracts.csv")
+write.csv(B16008_2019, "B16008_2019CensusTracts.csv")
+write.csv(B16008_2024, "B16008_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+B16008_2014$Year <- "2014"
+B16008_2019$Year <- "2019"
+B16008_2024$Year <- "2024"
+
+#Bind them together
+b16008_census <- bind_rows(B16008_2014, B16008_2019, B16008_2024)
+
+#Write to .csv
+write.csv(b16008_census, "B16008_CensusTracts.csv")
+```
+
+S1601
+
+```{r S1601}
+#Read in data
+S1601_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175855/ACSST5Y2014.S1601-Data.csv", header = TRUE)
+S1601_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175855/ACSST5Y2019.S1601-Data.csv", header = TRUE)
+S1601_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175855/ACSST5Y2024.S1601-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(S1601_2014) <- as.character(S1601_2014[1, ])
+colnames(S1601_2019) <- as.character(S1601_2019[1, ])
+colnames(S1601_2024) <- as.character(S1601_2024[1, ])
+
+#Remove the first row
+S1601_2014 <- S1601_2014[-1, ]
+S1601_2019 <- S1601_2019[-1, ]
+S1601_2024 <- S1601_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+S1601_2014 <- S1601_2014 |>
+  select(-contains("Margin"))
+S1601_2019 <- S1601_2019 |>
+  select(-contains("Margin"))
+S1601_2024 <- S1601_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(S1601_2014) <- gsub("!!", "_", colnames(S1601_2014))
+colnames(S1601_2014) <- gsub(" ", "_", colnames(S1601_2014))
+colnames(S1601_2014) <- gsub(":", "", colnames(S1601_2014))
+
+colnames(S1601_2019) <- gsub("!!", "_", colnames(S1601_2019))
+colnames(S1601_2019) <- gsub(" ", "_", colnames(S1601_2019))
+colnames(S1601_2019) <- gsub(":", "", colnames(S1601_2019))
+
+colnames(S1601_2024) <- gsub("!!", "_", colnames(S1601_2024))
+colnames(S1601_2024) <- gsub(" ", "_", colnames(S1601_2024))
+colnames(S1601_2024) <- gsub(":", "", colnames(S1601_2024))
+
+#Write these out 
+write.csv(S1601_2014, "S1601_2014CensusTracts.csv")
+write.csv(S1601_2019, "S1601_2019CensusTracts.csv")
+write.csv(S1601_2024, "S1601_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+S1601_2014$Year <- "2014"
+S1601_2019$Year <- "2019"
+S1601_2024$Year <- "2024"
+
+#Bind them together
+s1601_census <- bind_rows(S1601_2014, S1601_2019, S1601_2024)
+
+#Write to .csv
+write.csv(s1601_census, "S1601_CensusTracts.csv")
+```
+
+S1602
+```{r S1602}
+#Read in data
+S1602_2014 <- read.csv("~/Downloads/productDownload_2026-03-28T175925/ACSST5Y2014.S1602-Data.csv", header = TRUE)
+S1602_2019 <- read.csv("~/Downloads/productDownload_2026-03-28T175925/ACSST5Y2019.S1602-Data.csv", header = TRUE)
+S1602_2024 <- read.csv("~/Downloads/productDownload_2026-03-28T175925/ACSST5Y2024.S1602-Data.csv", header = TRUE)
+
+#Make the first row the column names
+colnames(S1602_2014) <- as.character(S1602_2014[1, ])
+colnames(S1602_2019) <- as.character(S1602_2019[1, ])
+colnames(S1602_2024) <- as.character(S1602_2024[1, ])
+
+#Remove the first row
+S1602_2014 <- S1602_2014[-1, ]
+S1602_2019 <- S1602_2019[-1, ]
+S1602_2024 <- S1602_2024[-1, ]
+
+
+#Filter out margin of error columns
+#library(dplyr)
+S1602_2014 <- S1602_2014 |>
+  select(-contains("Margin"))
+S1602_2019 <- S1602_2019 |>
+  select(-contains("Margin"))
+S1602_2024 <- S1602_2024 |>
+  select(-contains("Margin"))
+
+#Restructure row names
+colnames(S1602_2014) <- gsub("!!", "_", colnames(S1602_2014))
+colnames(S1602_2014) <- gsub(" ", "_", colnames(S1602_2014))
+colnames(S1602_2014) <- gsub(":", "", colnames(S1602_2014))
+
+colnames(S1602_2019) <- gsub("!!", "_", colnames(S1602_2019))
+colnames(S1602_2019) <- gsub(" ", "_", colnames(S1602_2019))
+colnames(S1602_2019) <- gsub(":", "", colnames(S1602_2019))
+
+colnames(S1602_2024) <- gsub("!!", "_", colnames(S1602_2024))
+colnames(S1602_2024) <- gsub(" ", "_", colnames(S1602_2024))
+colnames(S1602_2024) <- gsub(":", "", colnames(S1602_2024))
+
+#Write these out 
+write.csv(S1602_2014, "S1602_2014CensusTracts.csv")
+write.csv(S1602_2019, "S1602_2019CensusTracts.csv")
+write.csv(S1602_2024, "S1602_2024CensusTracts.csv")
+
+#combine into one big dataset? add a column that will specify year of the data. 
+#Add Year column to each dataset. 
+S1602_2014$Year <- "2014"
+S1602_2019$Year <- "2019"
+S1602_2024$Year <- "2024"
+
+#Bind them together
+s1602_census <- bind_rows(S1602_2014, S1602_2019, S1602_2024)
+
+#Write to .csv
+write.csv(s1602_census, "S1602_CensusTracts.csv")
+```
