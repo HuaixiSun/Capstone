@@ -149,10 +149,12 @@ $$
 df <- df %>%
   mutate(
     demand = imp * coef[1] + lep * coef[2] + pov * coef[3] + teen * coef[4],
+    supply = supply/mean(supply),
+    demand = demand/mean(demand),
     rawi = supply/demand,
     i = rawi/mean(rawi)
   ) %>%
-  select(Category, language, supply, demand, i) %>%
+  select(Category, language, supply, demand, rawi, i) %>%
   arrange(desc(i))
 df
 ```
