@@ -14,19 +14,11 @@ library(dplyr)
 
 #Read in the datasets
 S0501_2014 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2014 ACS/ACSST5Y2014.S0501-Data.csv", header = TRUE)
-S0501_2015 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2015 ACS/ACSST5Y2015.S0501-Data.csv", header = TRUE)
-S0501_2016 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2016 ACS/ACSST5Y2016.S0501-Data.csv", header = TRUE)
-S0501_2017 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2017 ACS/ACSST5Y2017.S0501-Data.csv", header = TRUE)
-S0501_2018 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2018 ACS/ACSST5Y2018.S0501-Data.csv", header = TRUE)
 S0501_2019 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2019 ACS/ACSST5Y2019.S0501-Data.csv", header = TRUE)
-S0501_2020 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2020 ACS/ACSST5Y2020.S0501-Data.csv", header = TRUE)
-S0501_2021 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2021 ACS/ACSST5Y2021.S0501-Data.csv", header = TRUE)
-S0501_2022 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2022 ACS/ACSST5Y2022.S0501-Data.csv", header = TRUE)
-S0501_2023 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2023 ACS/ACSST5Y2023.S0501-Data.csv", header = TRUE)
 S0501_2024 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2024 ACS/ACSST5Y2024.S0501-Data.csv", header = TRUE)
 
 #Merge the data.
-s0501 <- bind_rows(S0501_2014, S0501_2015, S0501_2016, S0501_2017, S0501_2018, S0501_2019, S0501_2020, S0501_2021, S0501_2022, S0501_2023, S0501_2024)
+s0501 <- bind_rows(S0501_2014, S0501_2019,  S0501_2024)
 
 #Take out some of the columns and rows
 #make the first row the header 
@@ -40,7 +32,7 @@ s0501 <- s0501[evenrows == 0, ]
 s0501 <- s0501 |>
   select(-contains("Margin"))
 
-#Restructure row names
+#Restructure column names
 colnames(s0501) <- gsub("!!", "_", colnames(s0501))
 colnames(s0501) <- gsub(" ", "_", colnames(s0501))
 
@@ -53,23 +45,11 @@ write.csv(s0501, file = "S0501.csv")
 ```{r, S1601}
 #Read in the datasets
 S1601_2014 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2014 ACS/ACSST5Y2014.S1601-Data.csv", header = TRUE)
-S1601_2015 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2015 ACS/ACSST5Y2015.S1601-Data.csv", header = TRUE)
-S1601_2016 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2016 ACS/ACSST5Y2016.S1601-Data.csv", header = TRUE)
-S1601_2017 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2017 ACS/ACSST5Y2017.S1601-Data.csv", header = TRUE)
-S1601_2018 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2018 ACS/ACSST5Y2018.S1601-Data.csv", header = TRUE)
 S1601_2019 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2019 ACS/ACSST5Y2019.S1601-Data.csv", header = TRUE)
-S1601_2020 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2020 ACS/ACSST5Y2020.S1601-Data.csv", header = TRUE)
-S1601_2021 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2021 ACS/ACSST5Y2021.S1601-Data.csv", header = TRUE)
-S1601_2022 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2022 ACS/ACSST5Y2022.S1601-Data.csv", header = TRUE)
-S1601_2023 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2023 ACS/ACSST5Y2023.S1601-Data.csv", header = TRUE)
 S1601_2024 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2024 ACS/ACSST5Y2024.S1601-Data.csv", header = TRUE)
 
-
-
-
 #Merge the Data
-s1601 <- bind_rows(S1601_2014, S1601_2015, S1601_2016, S1601_2017, S1601_2018, S1601_2019, S1601_2020, S1601_2021, S1601_2022, S1601_2023, S1601_2024)
-
+s1601 <- bind_rows(S1601_2014, S1601_2019,  S1601_2024)
 
 
 header1 <- s1601[1, ]
@@ -90,7 +70,7 @@ s1601 <- do.call(     cbind,lapply(split(seq_along(names(s1601)), names(s1601)),
          } else {
             apply(s1601[, cols], 1, function(x) x[!is.na(x)][1])        }}))
 
-#Restructure row names
+#Restructure column names
 colnames(s1601) <- gsub("!!", "_", colnames(s1601))
 colnames(s1601) <- gsub(" ", "_", colnames(s1601))
 
@@ -110,15 +90,7 @@ I decided to manually clean this one.
 
 ```{r, S1602}
 S1602_2014 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2014 ACS/ACSST5Y2014.S1602-Data.csv", header = TRUE)
-S1602_2015 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2015 ACS/ACSST5Y2015.S1602-Data.csv", header = TRUE)
-S1602_2016 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2016 ACS/ACSST5Y2016.S1602-Data.csv", header = TRUE)
-S1602_2017 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2017 ACS/ACSST5Y2017.S1602-Data.csv", header = TRUE)
-S1602_2018 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2018 ACS/ACSST5Y2018.S1602-Data.csv", header = TRUE)
 S1602_2019 <- read.csv("~/Downloads/productDownload_2026-03-10T133428/ACSST5Y2019.S1602-Data.csv", header = TRUE)
-S1602_2020 <- read.csv("~/Downloads/productDownload_2026-03-10T133428/ACSST5Y2020.S1602-Data.csv", header = TRUE)
-S1602_2021 <- read.csv("~/Downloads/productDownload_2026-03-10T133428/ACSST5Y2021.S1602-Data.csv", header = TRUE)
-S1602_2022 <- read.csv("~/Downloads/productDownload_2026-03-10T133428/ACSST5Y2022.S1602-Data.csv")
-S1602_2023 <- read.csv("~/Downloads/productDownload_2026-03-10T133428/ACSST5Y2023.S1602-Data.csv", header = TRUE)
 S1602_2024 <- read.csv("~/Downloads/productDownload_2026-03-10T133428/ACSST5Y2024.S1602-Data.csv", header = TRUE)
 
 #Combine the datasets. 
@@ -129,7 +101,7 @@ raw <- read.csv("~/Downloads/S1602.csv", header = TRUE)
 
 
 
-#Change row names
+#Change column names
 #colnames(raw) <- gsub("\\.....", "_", colnames(raw), fixed = TRUE)
 #colnames(raw) <- gsub("[\\..]+", "_", colnames(raw), fixed = TRUE)
 colnames(raw) <- gsub("\\.", "_", colnames(raw), fixed = TRUE)
@@ -144,25 +116,16 @@ write.csv(raw, file = "S1602.csv")
 #Variable S0502
 ```{r, S0502}
 S0502_2014 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2014 ACS/ACSST5Y2014.S0502-Data.csv", header = TRUE)
-S0502_2015 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2015 ACS/ACSST5Y2015.S0502-Data.csv", header = TRUE)
-S0502_2016 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2016 ACS/ACSST5Y2016.S0502-Data.csv", header = TRUE)
-S0502_2017 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2017 ACS/ACSST5Y2017.S0502-Data.csv", header = TRUE)
-S0502_2018 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2018 ACS/ACSST5Y2018.S0502-Data.csv", header = TRUE)
 S0502_2019 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2019 ACS/ACSST5Y2019.S0502-Data.csv", header = TRUE)
-S0502_2020 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2020 ACS/ACSST5Y2020.S0502-Data.csv", header = TRUE)
-S0502_2021 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2021 ACS/ACSST5Y2021.S0502-Data.csv", header = TRUE)
-S0502_2022 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2022 ACS/ACSST5Y2022.S0502-Data.csv", header = TRUE)
-S0502_2023 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2023 ACS/ACSST5Y2023.S0502-Data.csv", header = TRUE)
 S0502_2024 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2024 ACS/ACSST5Y2024.S0502-Data.csv", header = TRUE)
 
 #Merge the data.
-s0502 <- bind_rows(S0502_2014, S0502_2015, S0502_2016, S0502_2017, S0502_2018, S0502_2019, S0502_2020, S0502_2021, S0502_2022, S0502_2023, S0502_2024)
+s0502 <- bind_rows(S0502_2014, S0502_2019,  S0502_2024)
 
 #Take out some of the columns and rows
 #make the first row the header 
 colnames(s0502) <- as.character(s0502[1, ])
 evenrows <- seq_len(nrow(s0502)) %% 2
-
 
 s0502 <- s0502[evenrows == 0, ]
 
@@ -170,7 +133,7 @@ s0502 <- s0502[evenrows == 0, ]
 s0502 <- s0502 |>
   select(-contains("Margin"))
 
-#Restructure row names
+#Restructure column names
 colnames(s0502) <- gsub("!!", "_", colnames(s0502))
 colnames(s0502) <- gsub(" ", "_", colnames(s0502))
 
@@ -181,19 +144,11 @@ write.csv(s0502, file = "S0502.csv")
 #Variable B05002
 ```{r, B05002}
 B05002_2014 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2014 ACS/ACSDT5Y2014.B05002-Data.csv", header = TRUE)
-B05002_2015 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2015 ACS/ACSDT5Y2015.B05002-Data.csv", header = TRUE)
-B05002_2016 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2016 ACS/ACSDT5Y2016.B05002-Data.csv", header = TRUE)
-B05002_2017 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2017 ACS/ACSDT5Y2017.B05002-Data.csv", header = TRUE)
-B05002_2018 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2018 ACS/ACSDT5Y2018.B05002-Data.csv", header = TRUE)
 B05002_2019 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2019 ACS/ACSDT5Y2019.B05002-Data.csv", header = TRUE)
-B05002_2020 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2020 ACS/ACSDT5Y2020.B05002-Data.csv", header = TRUE)
-B05002_2021 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2021 ACS/ACSDT5Y2021.B05002-Data.csv", header = TRUE)
-B05002_2022 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2022 ACS/ACSDT5Y2022.B05002-Data.csv", header = TRUE)
-B05002_2023 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2023 ACS/ACSDT5Y2023.B05002-Data.csv", header = TRUE)
 B05002_2024 <- read.csv("~/OneDrive/Documents/GitHub/Capstone/Raw Data CCD/2024 ACS/ACSDT5Y2024.B05002-Data.csv", header = TRUE)
 
 #Merge the data.
-b05002 <- bind_rows(B05002_2014, B05002_2015, B05002_2016, B05002_2017, B05002_2018, B05002_2019, B05002_2020, B05002_2021, B05002_2022, B05002_2023, B05002_2024)
+b05002 <- bind_rows(B05002_2014, B05002_2019,  B05002_2024)
 
 header1 <- b05002[1, ]
 header2 <- b05002[3, ]
@@ -214,7 +169,7 @@ b05002 <- do.call(     cbind,lapply(split(seq_along(names(b05002)), names(b05002
             apply(b05002[, cols], 1, function(x) x[!is.na(x)][1])        }}))
 
 b05002 <- as.data.frame(b05002)
-#Restructure row names
+#Restructure column names
 colnames(b05002) <- gsub("!!", "_", colnames(b05002))
 colnames(b05002) <- gsub(" ", "_", colnames(b05002))
 
