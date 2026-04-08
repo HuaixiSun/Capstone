@@ -1,6 +1,8 @@
 ---
 title: "Index"
-output: html_document
+output:
+  html_document: default
+  pdf: default
 ---
 
 ```{r}
@@ -426,6 +428,7 @@ last
 ```{r}
 kable(top[, c("language", "Category", "index")], 
       caption = "Language Access Availability in Gainesville")
+write.csv(top, "Language Access Availability in Gainesville.csv", row.names = FALSE)
 ```
 
 
