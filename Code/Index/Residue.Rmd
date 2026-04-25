@@ -1,0 +1,102 @@
+---
+title: "Residue"
+output: html_document
+---
+
+---
+title: "Untitled"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+library(tidyverse)
+library(forcats)
+```
+
+
+```{r}
+df <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vR2Ouwi_7tjwsP87vmH477lwU1YmvVd7qcU53BE5ln1DNQZe9GRRLGAdQn5b90fqZ0Rw85EFXj1PCla/pub?output=csv")
+df <- df %>% 
+  filter(Category != "")
+```
+
+```{r}
+chisq_spec <- chisq.test(df$Specialty, df$Availability)
+chisq_cat <- chisq.test(df$Category, df$Availability)
+chisq_spec
+chisq_cat
+```
+
+```{r}
+# Specialty Surplus
+chisq_spec <- chisq.test(df$Specialty, df$Availability)
+resid_spec_df <- as.data.frame(chisq_spec$residuals) %>%
+  filter(Freq>0.7) %>%
+  rename(Specialty = df.Specialty, Availability = df.Availability, Residual = Freq)
+ggplot(resid_spec_df
+       %>% filter(Availability == "Y"), aes(x = fct_reorder(Specialty, -Residual), y = Residual, fill = Availability)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "lightgreen") +
+  geom_hline(yintercept = 0) + 
+  labs(title = "Adequacy",
+       x = "Specialty",
+       y = "") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 55, hjust = 1, size = 10),
+    legend.position = "none",
+  )
+```
+```{r}
+# Specialty Deficit
+chisq_spec <- chisq.test(df$Specialty, df$Availability)
+resid_spec_df <- as.data.frame(chisq_spec$residuals) %>%
+  filter(Freq>1.4) %>%
+  rename(Specialty = df.Specialty, Availability = df.Availability, Residual = Freq)
+
+
+ggplot(resid_spec_df
+       %>% filter(Availability == "N"), aes(x = fct_reorder(Specialty, -Residual), y = Residual, fill = Availability)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_hline(yintercept = 0) + 
+  labs(title = "Gaps",
+       x = "Specialty",
+       y = "") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 55, hjust = 1, size = 10),
+    legend.position = "none"
+  )
+```
+```{r}
+df$Category
+```
+
+
+```{r}
+chisq_cat <- chisq.test(df$Category, df$Availability)
+resid_cat_df <- as.data.frame(chisq_cat$residuals) %>%
+  rename(Category = df.Category, Availability = df.Availability, Residual = Freq)
+resid_cat_df
+ggplot(resid_cat_df
+       %>% filter(Availability == "Y"), aes(x = fct_reorder(Category, Residual), y = Residual, fill = Residual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_hline(yintercept = 0) +
+  coord_flip() +
+  labs(title = "Categories Alignment",
+       x = "Category",
+       y = "",
+       fill = "Availability") +
+  scale_fill_gradient(low = "indianred2", high = "lightgreen")+
+  theme_minimal()+
+  theme(
+    axis.text.y=element_text(size=10),
+    legend.position = "none"
+  )
+```
+```{r}
+chisq_cat$observed
+chisq_cat$expected
+```
+
